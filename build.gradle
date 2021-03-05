@@ -3,18 +3,17 @@ plugins {
 }
 
 group = 'org.transparent'
+archivesBaseName = 'eureka'
 version = '1.0.0'
 
 repositories {
     mavenCentral()
 }
 
+dependencies {
 
-
-compileKotlin {
-    kotlinOptions.jvmTarget = '1.8'
 }
 
-compileTestKotlin {
+compileKotlin {
     kotlinOptions.jvmTarget = '1.8'
 }
