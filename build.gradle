@@ -1,6 +1,10 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.4.31'
+    id 'java'
+    id 'maven-publish'
 }
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 group = 'org.transparent'
 archivesBaseName = 'eureka'
@@ -11,9 +15,21 @@ repositories {
 }
 
 dependencies {
-
+    compile files("${System.properties['java.home']}/../lib/tools.jar")
 }
 
-compileKotlin {
-    kotlinOptions.jvmTarget = '1.8'
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            artifact sourceJar {
+                classifier "sources"
+            }
+        }
+    }
 }
