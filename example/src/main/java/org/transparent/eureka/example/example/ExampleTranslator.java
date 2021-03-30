@@ -1,4 +1,4 @@
-package org.transparent.eureka.example;
+package org.transparent.eureka.example.example;
 
 import com.sun.tools.javac.code.Flags;
 import com.sun.tools.javac.code.TypeTag;

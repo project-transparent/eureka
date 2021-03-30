@@ -1,4 +1,4 @@
-package org.transparent.eureka.example;
+package org.transparent.eureka.example.example;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

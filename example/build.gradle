@@ -29,5 +29,5 @@ dependencies {
 
         This will install Lucent and its sources to your local Maven repo.
     */
-    implementation 'org.transparent:lucent:1.0.0'
+    implementation 'org.transparent:lucent:1.0.1'
 }

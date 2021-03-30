@@ -10,7 +10,7 @@ import com.sun.tools.javac.util.Names;
 import org.transparent.eureka.tree.builder.BlockBuilder;
 import org.transparent.eureka.tree.builder.FieldBuilder;
 import org.transparent.eureka.tree.builder.MethodBuilder;
-import org.transparent.eureka.util.Injector;
+import org.transparent.eureka.util.Injector.*;
 
 public class EurekaFactory extends AbstractTreeFactory {
     public EurekaFactory(Names names, TreeMaker factory) {
@@ -115,10 +115,6 @@ public class EurekaFactory extends AbstractTreeFactory {
         return factory.VarDef(mods(), name(name), type, null);
     }
 
-    public FieldBuilder field() {
-        return new FieldBuilder(names, factory);
-    }
-
     @Override
     public JCMethodDecl method(JCModifiers mods, String name, JCExpression returnType, JCBlock body) {
         return factory.MethodDef(
@@ -144,6 +140,31 @@ public class EurekaFactory extends AbstractTreeFactory {
                 literal(), List.nil(),
                 List.nil(), List.nil(),
                 body, null);
+    }
+
+    @Override
+    public JCNewArray array(JCExpression type, List<JCExpression> dimensions, List<JCExpression> elements) {
+        return factory.NewArray(type, dimensions, elements);
+    }
+
+    @Override
+    public JCNewArray array(JCExpression type, List<JCExpression> elements) {
+        return factory.NewArray(type, List.nil(), elements);
+    }
+
+    @Override
+    public JCArrayTypeTree array(JCExpression type) {
+        return factory.TypeArray(type);
+    }
+
+    @Override
+    public JCNewArray array(List<JCExpression> elements) {
+        return factory.NewArray(null, List.nil(), elements);
+    }
+
+    @Override
+    public JCNewArray array() {
+        return factory.NewArray(null, List.nil(), List.nil());
     }
 
     @Override
@@ -312,11 +333,41 @@ public class EurekaFactory extends AbstractTreeFactory {
         return factory.Assign(lhs, literal(rhs));
     }
 
+    @Override
+    public JCExpressionStatement call(String name, JCExpression... args) {
+        JCExpression expr = id(name);
+        if (args.length > 0)
+            expr = factory.Apply(
+                List.nil(), expr, List.from(args)
+            );
+        return factory.Exec(expr);
+    }
+
+    @Override
+    public JCExpressionStatement call(String name, Object... args) {
+        JCExpression expr = id(name);
+        if (args.length > 0) {
+            List<JCExpression> exprs = List.nil();
+            for (Object arg : args)
+                exprs = exprs.append(literal(arg));
+            expr = factory.Apply(List.nil(), expr, exprs);
+        }
+        return factory.Exec(expr);
+    }
+
+    public FieldBuilder field() {
+        return new FieldBuilder(names, factory);
+    }
+
     public MethodBuilder method() {
         return new MethodBuilder(names, factory);
     }
 
-    public Injector inject(JCClassDecl tree) {
-        return new Injector(tree);
+    public ClassInjector inject(JCClassDecl tree) {
+        return new ClassInjector(tree);
+    }
+
+    public MethodInjector inject(JCMethodDecl tree) {
+        return new MethodInjector(tree, factory);
     }
 }

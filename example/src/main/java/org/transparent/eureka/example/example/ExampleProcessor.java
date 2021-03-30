@@ -1,4 +1,4 @@
-package org.transparent.eureka.example;
+package org.transparent.eureka.example.example;
 
 import org.transparent.lucent.processor.LucentProcessor;
 import org.transparent.lucent.transform.LucentTranslator;

@@ -50,6 +50,16 @@ public interface TreeFactory {
 
     JCMethodDecl method(String name, JCBlock body);
 
+    JCNewArray array(JCExpression type, List<JCExpression> dimensions, List<JCExpression> elements);
+
+    JCNewArray array(JCExpression type, List<JCExpression> elements);
+
+    JCArrayTypeTree array(JCExpression type);
+
+    JCNewArray array(List<JCExpression> elements);
+
+    JCNewArray array();
+
     JCBlock block(long flags);
 
     JCReturn returnStat(JCExpression value);
@@ -125,6 +135,10 @@ public interface TreeFactory {
     JCAssign assign(Object lhs, JCExpression rhs);
 
     JCAssign assign(JCExpression lhs, Object rhs);
+
+    JCExpressionStatement call(String name, JCExpression... args);
+
+    JCExpressionStatement call(String name, Object... args);
 
     BlockBuilder block();
 }
