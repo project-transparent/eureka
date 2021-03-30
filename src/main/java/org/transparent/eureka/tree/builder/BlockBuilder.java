@@ -19,6 +19,11 @@ public class BlockBuilder extends EurekaBuilder<JCBlock> {
         this.factory = tree;
     }
 
+    public BlockBuilder setFlags(long flags) {
+        this.flags = flags;
+        return this;
+    }
+
     public BlockBuilder returnStat(JCExpression value) {
         return add(factory.returnStat(value));
     }
