@@ -5,6 +5,7 @@ import com.sun.tools.javac.code.TypeTag;
 import com.sun.tools.javac.tree.JCTree.*;
 import com.sun.tools.javac.tree.TreeMaker;
 import com.sun.tools.javac.util.List;
+import com.sun.tools.javac.util.Name;
 import com.sun.tools.javac.util.Names;
 import org.transparent.eureka.tree.builder.BlockBuilder;
 import org.transparent.eureka.tree.builder.FieldBuilder;
@@ -14,6 +15,11 @@ import org.transparent.eureka.util.Injector;
 public class EurekaFactory extends AbstractTreeFactory {
     public EurekaFactory(Names names, TreeMaker factory) {
         super(names, factory);
+    }
+
+    @Override
+    public Name name(String name) {
+        return names.fromString(name);
     }
 
     @Override
@@ -52,7 +58,7 @@ public class EurekaFactory extends AbstractTreeFactory {
     private JCExpression id(String[] ids) {
         JCExpression expr = null;
         for (String id : ids) {
-            if (id == null) factory.Ident(name(id));
+            if (expr == null) expr = factory.Ident(name(id));
             else expr = factory.Select(expr, name(id));
         }
         return expr;
@@ -147,7 +153,163 @@ public class EurekaFactory extends AbstractTreeFactory {
 
     @Override
     public BlockBuilder block() {
-        return new BlockBuilder(names, factory);
+        return new BlockBuilder(names, factory, this);
+    }
+
+    public JCReturn returnStat(JCExpression value) {
+        return factory.Return(value);
+    }
+
+    public JCReturn returnStat(Object value) {
+        return factory.Return(literal(value));
+    }
+
+    public JCAssert assertStat(JCExpression condition, JCExpression detail) {
+        return factory.Assert(condition, detail);
+    }
+
+    public JCAssert assertStat(JCExpression condition, Object detail) {
+        return factory.Assert(condition, literal(detail));
+    }
+
+    public JCWhileLoop whileStat(JCExpression condition, BlockBuilder block) {
+        return whileStat(condition, block.build());
+    }
+
+    public JCWhileLoop whileStat(JCExpression condition, JCStatement statement) {
+        return factory.WhileLoop(condition, statement);
+    }
+
+    public JCDoWhileLoop doStat(JCExpression condition, BlockBuilder block) {
+        return doStat(condition, block.build());
+    }
+
+    public JCDoWhileLoop doStat(JCExpression condition, JCStatement statement) {
+        return factory.DoLoop(statement, condition);
+    }
+
+    public JCForLoop forStat(List<JCStatement> initializers, JCExpression condition,
+                             List<JCExpressionStatement> steps, BlockBuilder block) {
+        return forStat(initializers, condition, steps, block.build());
+    }
+
+    public JCForLoop forStat(List<JCStatement> initializers, JCExpression condition,
+                             List<JCExpressionStatement> steps, JCStatement statement) {
+        return factory.ForLoop(initializers, condition, steps, statement);
+    }
+
+    public JCEnhancedForLoop forEachStat(JCVariableDecl variable, JCExpression condition,
+                                         BlockBuilder block) {
+        return forEachStat(variable, condition, block.build());
+    }
+
+    public JCEnhancedForLoop forEachStat(JCVariableDecl variable, JCExpression condition,
+                                         JCStatement statement) {
+        return factory.ForeachLoop(variable, condition, statement);
+    }
+
+    public JCLabeledStatement labelledStat(String label, JCStatement statement) {
+        return factory.Labelled(name(label), statement);
+    }
+
+    public JCIf ifStat(JCExpression condition, BlockBuilder then, BlockBuilder or) {
+        return ifStat(condition, then.build(), or.build());
+    }
+
+    public JCIf ifStat(JCExpression condition, BlockBuilder then, JCStatement or) {
+        return ifStat(condition, then.build(), or);
+    }
+
+    public JCIf ifStat(JCExpression condition, JCStatement then, BlockBuilder or) {
+        return ifStat(condition, then, or.build());
+    }
+
+    public JCIf ifStat(JCExpression condition, JCStatement then, JCStatement or) {
+        return factory.If(condition, then, or);
+    }
+
+    public JCIf ifStat(JCExpression condition, BlockBuilder then) {
+        return factory.If(condition, then.build(), null);
+    }
+
+    public JCIf ifStat(JCExpression condition, JCStatement then) {
+        return factory.If(condition, then, null);
+    }
+
+    public JCSwitch switchStat(JCExpression selector, List<JCCase> cases) {
+        return factory.Switch(selector, cases);
+    }
+
+    public JCContinue continueStat(String label) {
+        return factory.Continue(name(label));
+    }
+
+    public JCBreak breakStat(String label) {
+        return factory.Break(name(label));
+    }
+
+    public JCExpressionStatement exprStat(JCExpression expr) {
+        return factory.Exec(expr);
+    }
+
+    @Override
+    public JCBinary binary(Tag operator, JCExpression lhs, JCExpression rhs) {
+        return factory.Binary(operator, lhs, rhs);
+    }
+
+    @Override
+    public JCBinary binary(Tag operator, Object lhs, Object rhs) {
+        return factory.Binary(operator, literal(lhs), literal(rhs));
+    }
+
+    @Override
+    public JCBinary binary(Tag operator, Object lhs, JCExpression rhs) {
+        return factory.Binary(operator, literal(lhs), rhs);
+    }
+
+    @Override
+    public JCBinary binary(Tag operator, JCExpression lhs, Object rhs) {
+        return factory.Binary(operator, lhs, literal(rhs));
+    }
+
+    @Override
+    public JCAssignOp assign(Tag operator, JCExpression lhs, JCExpression rhs) {
+        return factory.Assignop(operator, lhs, rhs);
+    }
+
+    @Override
+    public JCAssignOp assign(Tag operator, Object lhs, Object rhs) {
+        return factory.Assignop(operator, literal(lhs), literal(rhs));
+    }
+
+    @Override
+    public JCAssignOp assign(Tag operator, Object lhs, JCExpression rhs) {
+        return factory.Assignop(operator, literal(lhs), rhs);
+    }
+
+    @Override
+    public JCAssignOp assign(Tag operator, JCExpression lhs, Object rhs) {
+        return factory.Assignop(operator, lhs, literal(rhs));
+    }
+
+    @Override
+    public JCAssign assign(JCExpression lhs, JCExpression rhs) {
+        return factory.Assign(lhs, rhs);
+    }
+
+    @Override
+    public JCAssign assign(Object lhs, Object rhs) {
+        return factory.Assign(literal(lhs), literal(rhs));
+    }
+
+    @Override
+    public JCAssign assign(Object lhs, JCExpression rhs) {
+        return factory.Assign(literal(lhs), rhs);
+    }
+
+    @Override
+    public JCAssign assign(JCExpression lhs, Object rhs) {
+        return factory.Assign(lhs, literal(rhs));
     }
 
     public MethodBuilder method() {

@@ -28,16 +28,6 @@ public final class ExampleTranslator extends LucentTranslator {
 
     @Override
     public void visitClassDef(JCClassDecl tree) {
-        final BlockBuilder block = eureka.block();
-        block
-                .ifStat(
-                        factory.Binary(Tag.NE,
-                                eureka.literal("meme"),
-                                eureka.literal()),
-                        eureka.block()
-                                .returnStat(1)
-                )
-                .returnStat(0);
         result = eureka
                 .inject(tree)
                 .add(eureka.field()
@@ -49,7 +39,14 @@ public final class ExampleTranslator extends LucentTranslator {
                         .mods(Flags.PUBLIC)
                         .returns(TypeTag.INT)
                         .name("generated")
-                        .body(block))
+                        .body(eureka.block()
+                                .ifStat(
+                                        eureka.binary(Tag.NE,
+                                                eureka.id("generated"),
+                                                eureka.literal()),
+                                        eureka.block()
+                                                .returnStat(1))
+                                .returnStat(0)))
                 .tree();
     }
 }

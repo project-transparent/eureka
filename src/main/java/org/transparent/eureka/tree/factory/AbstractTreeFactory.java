@@ -13,8 +13,4 @@ public abstract class AbstractTreeFactory implements TreeFactory {
         this.names = names;
         this.factory = factory;
     }
-
-    protected Name name(String name) {
-        return names.fromString(name);
-    }
 }
