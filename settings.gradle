@@ -1,3 +1,10 @@
+pluginManagement {
+    repositories {
+        mavenLocal()
+        gradlePluginPortal()
+    }
+}
+
 rootProject.name = 'eureka'
 include 'example'
 include 'example-test'

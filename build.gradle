@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
+    id 'org.transparent.diamond' version '1.0.0'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
