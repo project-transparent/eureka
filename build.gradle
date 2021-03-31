@@ -4,20 +4,16 @@ plugins {
     id 'org.transparent.diamond' version '1.0.0'
 }
 
+subprojects {
+    apply plugin: 'org.transparent.diamond'
+}
+
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 group = 'org.transparent'
 archivesBaseName = 'eureka'
 version = '1.0.0'
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    compile files("${System.properties['java.home']}/../lib/tools.jar")
-}
 
 diamond {
     autoMavenPublish = true

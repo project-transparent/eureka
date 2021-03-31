@@ -16,18 +16,5 @@ repositories {
 
 dependencies {
     implementation project(':')
-
-    /*
-        Lucent is used here as a good combo with Eureka.
-        - Lucent facilitates the structure of a processor project
-        - Eureka allows for easier transformation of the processor's trees
-
-        If you need to test this example project out, follow these steps:
-
-        1. Clone 'https://github.com/project-transparent/lucent'
-        2. Run 'gradlew publishToLocalMaven' in the root directory of the cloned folder
-
-        This will install Lucent and its sources to your local Maven repo.
-    */
     implementation 'org.transparent:lucent:1.0.1'
 }

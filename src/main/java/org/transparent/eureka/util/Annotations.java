@@ -7,13 +7,13 @@ import java.lang.annotation.Annotation;
 public final class Annotations {
     private Annotations() {}
 
-    public static boolean annotated(JCMethodDecl tree, Class<? extends Annotation> annotation) {
+    public static boolean annotated(JCMethodDecl tree, Class<? extends Annotation> clazz) {
         return tree.mods.annotations
                 .stream()
-                .anyMatch(anno -> anno.type.tsym
+                .anyMatch(annotation -> annotation.type.tsym
                         .getQualifiedName()
                         .contentEquals(
-                                annotation.getCanonicalName()
+                                clazz.getCanonicalName()
                         ));
     }
 }
