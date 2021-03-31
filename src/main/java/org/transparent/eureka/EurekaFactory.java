@@ -8,7 +8,7 @@ import com.sun.tools.javac.util.Name;
 import com.sun.tools.javac.util.Names;
 import org.transparent.eureka.api.factory.StatementFactory;
 import org.transparent.eureka.api.factory.MemberFactory;
-import org.transparent.eureka.impl.builder.ArrayBuilder;
+import org.transparent.eureka.impl.builder.statement.ArrayBuilder;
 import org.transparent.eureka.impl.builder.BlockBuilder;
 import org.transparent.eureka.impl.builder.FieldBuilder;
 import org.transparent.eureka.impl.builder.MethodBuilder;
@@ -25,11 +25,11 @@ public class EurekaFactory implements MemberFactory, StatementFactory {
     }
 
     public FieldBuilder field() {
-        return new FieldBuilder(names, this);
+        return new FieldBuilder(this);
     }
 
     public MethodBuilder method() {
-        return new MethodBuilder(names, this);
+        return new MethodBuilder(this);
     }
 
     @Override
@@ -43,13 +43,13 @@ public class EurekaFactory implements MemberFactory, StatementFactory {
     }
 
     @Override
-    public JCModifiers mods(long flags, List<JCAnnotation> annotations) {
-        return factory.Modifiers(flags, annotations);
+    public JCModifiers mods(long flags, JCAnnotation... annotations) {
+        return factory.Modifiers(flags, List.from(annotations));
     }
 
     @Override
-    public JCModifiers annotations(List<JCAnnotation> annotations) {
-        return null;
+    public JCModifiers annotations(JCAnnotation... annotations) {
+        return factory.Modifiers(0L, List.from(annotations));
     }
 
     @Override
@@ -75,8 +75,8 @@ public class EurekaFactory implements MemberFactory, StatementFactory {
     }
 
     @Override
-    public List<JCExpression> ids(List<JCVariableDecl> parameters) {
-        return factory.Idents(parameters);
+    public List<JCExpression> ids(JCVariableDecl... parameters) {
+        return factory.Idents(List.from(parameters));
     }
 
     @Override
@@ -101,12 +101,12 @@ public class EurekaFactory implements MemberFactory, StatementFactory {
 
     @Override
     public ArrayBuilder array() {
-        return null;
+        return new ArrayBuilder(this);
     }
 
     @Override
     public BlockBuilder block() {
-        return new BlockBuilder(names, this);
+        return new BlockBuilder(this);
     }
 
     @Override
@@ -131,7 +131,7 @@ public class EurekaFactory implements MemberFactory, StatementFactory {
 
     @Override
     public ForBuilder forLoop() {
-        return null;
+        return new ForBuilder(this);
     }
 
     @Override
@@ -155,8 +155,8 @@ public class EurekaFactory implements MemberFactory, StatementFactory {
     }
 
     @Override
-    public SwitchBuilder switchStat() {
-        return null;
+    public SwitchBuilder switchStat(JCExpression selector) {
+        return new SwitchBuilder(this, selector);
     }
 
     @Override

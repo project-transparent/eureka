@@ -2,9 +2,9 @@ package org.transparent.eureka.impl.builder;
 
 import com.sun.tools.javac.code.TypeTag;
 import com.sun.tools.javac.tree.JCTree.*;
-import com.sun.tools.javac.util.Names;
 import org.transparent.eureka.EurekaFactory;
 import org.transparent.eureka.api.builder.TreeBuilder;
+import org.transparent.eureka.util.Modifiers;
 
 public class FieldBuilder extends TreeBuilder<JCVariableDecl> {
     private JCModifiers mods;
@@ -12,9 +12,14 @@ public class FieldBuilder extends TreeBuilder<JCVariableDecl> {
     private JCExpression type;
     private JCExpression value;
 
-    public FieldBuilder(Names names, EurekaFactory factory) {
-        super(names, factory);
+    public FieldBuilder(EurekaFactory factory) {
+        super(factory);
         mods = factory.mods(0L);
+    }
+
+    public FieldBuilder mods(Modifiers mods) {
+        this.mods = factory.mods(mods.getFlags());
+        return this;
     }
 
     public FieldBuilder mods(long flags) {
@@ -55,7 +60,7 @@ public class FieldBuilder extends TreeBuilder<JCVariableDecl> {
     @Override
     public JCVariableDecl build() {
         return factory.maker().VarDef(mods,
-                names.fromString(name),
+                factory.names().fromString(name),
                 type, value);
     }
 }

@@ -3,7 +3,6 @@ package org.transparent.eureka.impl.builder;
 import com.sun.tools.javac.code.TypeTag;
 import com.sun.tools.javac.tree.JCTree.*;
 import com.sun.tools.javac.util.List;
-import com.sun.tools.javac.util.Names;
 import org.transparent.eureka.EurekaFactory;
 import org.transparent.eureka.api.builder.TreeBuilder;
 
@@ -18,8 +17,8 @@ public class MethodBuilder extends TreeBuilder<JCMethodDecl> {
     private JCBlock body;
     private JCExpression value;
 
-    public MethodBuilder(Names names, EurekaFactory factory) {
-        super(names, factory);
+    public MethodBuilder(EurekaFactory factory) {
+        super(factory);
         mods = factory.mods(0L);
         type = factory.literal();
         body = factory.maker().Block(0L, List.nil());
@@ -85,7 +84,7 @@ public class MethodBuilder extends TreeBuilder<JCMethodDecl> {
     @Override
     public JCMethodDecl build() {
         return factory.maker().MethodDef(
-                mods, names.fromString(name), type,
+                mods, factory.names().fromString(name), type,
                 typeParameters, receiver, parameters,
                 exceptions, body, value);
     }

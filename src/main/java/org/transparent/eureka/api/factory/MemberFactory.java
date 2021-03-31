@@ -4,21 +4,20 @@ import com.sun.tools.javac.code.TypeTag;
 import com.sun.tools.javac.tree.JCTree.*;
 import com.sun.tools.javac.util.List;
 import com.sun.tools.javac.util.Name;
-import org.transparent.eureka.impl.builder.FieldBuilder;
-import org.transparent.eureka.impl.builder.MethodBuilder;
+import org.transparent.eureka.api.builder.TreeBuilder;
 
 public interface MemberFactory extends Factory {
-    FieldBuilder field();
+    TreeBuilder<JCVariableDecl> field();
 
-    MethodBuilder method();
+    TreeBuilder<JCMethodDecl> method();
 
     Name name(String name);
 
     JCModifiers mods(long flags);
 
-    JCModifiers mods(long flags, List<JCAnnotation> annotations);
+    JCModifiers mods(long flags, JCAnnotation... annotations);
 
-    JCModifiers annotations(List<JCAnnotation> annotations);
+    JCModifiers annotations(JCAnnotation... annotations);
 
     JCExpression id(String id);
 
@@ -26,7 +25,7 @@ public interface MemberFactory extends Factory {
 
     JCExpression id(JCVariableDecl parameter);
 
-    List<JCExpression> ids(List<JCVariableDecl> parameters);
+    List<JCExpression> ids(JCVariableDecl... parameters);
 
     JCLiteral literal(TypeTag tag, Object value);
 

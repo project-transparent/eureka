@@ -1,16 +1,12 @@
 package org.transparent.eureka.api.factory;
 
 import com.sun.tools.javac.tree.JCTree.*;
-import com.sun.tools.javac.util.List;
-import org.transparent.eureka.impl.builder.ArrayBuilder;
-import org.transparent.eureka.impl.builder.BlockBuilder;
-import org.transparent.eureka.impl.builder.statement.ForBuilder;
-import org.transparent.eureka.impl.builder.statement.SwitchBuilder;
+import org.transparent.eureka.api.builder.TreeBuilder;
 
 public interface StatementFactory extends Factory {
-    ArrayBuilder array();
+    TreeBuilder<JCNewArray> array();
 
-    BlockBuilder block();
+    TreeBuilder<JCBlock> block();
 
     JCReturn returnStat(Object value);
 
@@ -20,10 +16,10 @@ public interface StatementFactory extends Factory {
 
     JCDoWhileLoop doLoop(JCExpression condition, Object block);
 
-    ForBuilder forLoop();
+    TreeBuilder<JCForLoop> forLoop();
 
     JCEnhancedForLoop forEach(JCVariableDecl variable, JCExpression condition,
-                                  Object block);
+                              Object block);
 
     JCLabeledStatement label(String label, JCStatement statement);
 
@@ -31,7 +27,7 @@ public interface StatementFactory extends Factory {
 
     JCIf ifStat(JCExpression condition, Object then);
 
-    SwitchBuilder switchStat();
+    TreeBuilder<JCSwitch> switchStat(JCExpression selector);
 
     JCContinue continueStat(String label);
 
