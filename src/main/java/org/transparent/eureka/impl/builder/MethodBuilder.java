@@ -5,6 +5,7 @@ import com.sun.tools.javac.tree.JCTree.*;
 import com.sun.tools.javac.util.List;
 import org.transparent.eureka.EurekaFactory;
 import org.transparent.eureka.api.builder.TreeBuilder;
+import org.transparent.eureka.util.Modifiers;
 
 public class MethodBuilder extends TreeBuilder<JCMethodDecl> {
     private JCModifiers mods;
@@ -22,6 +23,11 @@ public class MethodBuilder extends TreeBuilder<JCMethodDecl> {
         mods = factory.mods(0L);
         type = factory.literal();
         body = factory.maker().Block(0L, List.nil());
+    }
+
+    public MethodBuilder mods(Modifiers mods) {
+        this.mods = factory.mods(mods.getFlags());
+        return this;
     }
 
     public MethodBuilder mods(long flags) {

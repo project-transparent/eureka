@@ -175,7 +175,7 @@ public class EurekaFactory implements MemberFactory, StatementFactory {
     }
 
     @Override
-    public JCBinary bin(Tag operator, Object lhs, Object rhs) {
+    public JCBinary bin(Object lhs, Tag operator, Object rhs) {
         return factory.Binary(operator, expr(lhs), expr(rhs));
     }
 
@@ -202,9 +202,11 @@ public class EurekaFactory implements MemberFactory, StatementFactory {
     }
 
     public JCExpression expr(Object value) {
+        if (value == null)
+            return literal();
         return (value instanceof JCExpression)
                 ? (JCExpression) value
-                : factory.Literal(value);
+                : literal(value);
     }
 
     public JCStatement stat(Object value) {

@@ -7,6 +7,8 @@ public enum Modifiers {
     PUBLIC_STATIC_FINAL     (PUBLIC | STATIC | FINAL),
     PRIVATE_FINAL           (PRIVATE | FINAL),
     PUBLIC_FINAL            (PUBLIC | FINAL),
+    PRIVATE_STATIC          (PRIVATE | STATIC),
+    PUBLIC_STATIC           (PUBLIC | STATIC),
     ;
 
     private final long flags;

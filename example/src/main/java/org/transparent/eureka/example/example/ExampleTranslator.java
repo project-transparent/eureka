@@ -1,5 +1,6 @@
 package org.transparent.eureka.example.example;
 
+import com.sun.tools.javac.code.TypeTag;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.JCTree.*;
 import com.sun.tools.javac.tree.TreeMaker;
@@ -10,6 +11,7 @@ import org.transparent.lucent.transform.LucentTranslator;
 import javax.lang.model.element.Element;
 
 import static org.transparent.eureka.util.Modifiers.PRIVATE_FINAL;
+import static org.transparent.eureka.util.Modifiers.PUBLIC_STATIC;
 
 public final class ExampleTranslator extends LucentTranslator {
     private final EurekaFactory factory;
@@ -38,6 +40,15 @@ public final class ExampleTranslator extends LucentTranslator {
                 .type(String.class)
                 .name("myField")
                 .value("This is my field.")
+                .build());
+        tree.defs = tree.defs.append(factory.method()
+                .mods(PUBLIC_STATIC)
+                .type(TypeTag.VOID)
+                .name("myMethod")
+                .body(factory.block()
+                        .ifStat(factory.bin("Clearly not null", Tag.NE, null),
+                                factory.call("System.out.println", "If statement test."))
+                        .call("System.out.println", "Hello, world!"))
                 .build());
         result = tree;
     }

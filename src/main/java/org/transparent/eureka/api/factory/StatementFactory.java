@@ -35,7 +35,7 @@ public interface StatementFactory extends Factory {
 
     JCExpressionStatement exprStat(JCExpression expr);
 
-    JCBinary bin(Tag operator, Object lhs, Object rhs);
+    JCBinary bin(Object lhs, Tag operator, Object rhs);
 
     JCAssignOp assign(Tag operator, Object lhs, Object rhs);
 
