@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
-    id 'org.transparent.diamond' version '1.0.0'
+    id 'org.transparent.diamond' version '1.1.0'
     id 'idea'
 }
 
@@ -22,8 +22,8 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'org.transparent:lucent:1.0.1'
-    testImplementation 'org.transparent:diamond-compiletest:1.0.0'
+    testCompileOnly 'org.transparent:lucent:1.1.0'
+    testCompileOnly 'org.transparent:diamond-compiletest:1.1.0'
 }
 
 idea {
@@ -40,5 +40,5 @@ test {
 }
 
 diamond {
-    autoMavenPublish = true
+    publishType = 'ALL'
 }

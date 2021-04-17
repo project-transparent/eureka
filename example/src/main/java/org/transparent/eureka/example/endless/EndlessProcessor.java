@@ -5,6 +5,8 @@ import org.transparent.lucent.transform.LucentTranslator;
 import org.transparent.lucent.util.TypeKind;
 
 import java.lang.annotation.Annotation;
+import java.util.Collections;
+import java.util.Set;
 
 public final class EndlessProcessor extends LucentProcessor {
     @Override
@@ -13,8 +15,8 @@ public final class EndlessProcessor extends LucentProcessor {
     }
 
     @Override
-    public TypeKind getSupportedTypeKind() {
-        return TypeKind.CLASS;
+    public Set<TypeKind> getSupportedTypeKinds() {
+        return Collections.singleton(TypeKind.CLASS);
     }
 
     @Override
