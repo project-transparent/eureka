@@ -6,32 +6,33 @@ import com.sun.tools.javac.util.List;
 import org.transparent.eureka.EurekaFactory;
 import org.transparent.eureka.api.builder.TreeBuilder;
 import org.transparent.eureka.util.Modifiers;
+import org.transparent.eureka.util.Types;
 
 public class MethodBuilder extends TreeBuilder<JCMethodDecl> {
-    private JCModifiers mods;
+    private long mods;
     private String name;
     private JCExpression type;
     private List<JCTypeParameter> typeParameters = List.nil();
     private JCVariableDecl receiver;
     private List<JCVariableDecl> parameters = List.nil();
     private List<JCExpression> exceptions = List.nil();
-    private JCBlock body;
+    private JCStatement body;
     private JCExpression value;
 
     public MethodBuilder(EurekaFactory factory) {
         super(factory);
-        mods = factory.mods(0L);
-        type = factory.literal();
-        body = factory.maker().Block(0L, List.nil());
+        mods = 0L;
+        type = factory.utils.id(TypeTag.VOID);
+        body = factory.utils.block();
     }
 
     public MethodBuilder mods(Modifiers mods) {
-        this.mods = factory.mods(mods.getFlags());
+        this.mods = mods.getFlags();
         return this;
     }
 
     public MethodBuilder mods(long flags) {
-        this.mods = factory.mods(flags);
+        this.mods = flags;
         return this;
     }
 
@@ -41,7 +42,7 @@ public class MethodBuilder extends TreeBuilder<JCMethodDecl> {
     }
 
     public MethodBuilder type(String type) {
-        this.type = factory.id(type);
+        this.type = factory.utils.id(type);
         return this;
     }
 
@@ -50,8 +51,18 @@ public class MethodBuilder extends TreeBuilder<JCMethodDecl> {
         return this;
     }
 
-    public MethodBuilder type(TypeTag returnType) {
-        this.type = factory.id(returnType);
+    public MethodBuilder type(TypeTag type) {
+        this.type = factory.utils.id(type);
+        return this;
+    }
+
+    public MethodBuilder type(Types type) {
+        this.type = factory.utils.id(type.getTag());
+        return this;
+    }
+
+    public MethodBuilder type(Class<?> clazz) {
+        this.type = factory.utils.id(clazz.getCanonicalName());
         return this;
     }
 
@@ -75,10 +86,8 @@ public class MethodBuilder extends TreeBuilder<JCMethodDecl> {
         return this;
     }
 
-    public MethodBuilder body(Object body) {
-        this.body = (body instanceof BlockBuilder)
-                ? ((BlockBuilder) body).build()
-                : (JCBlock) body;
+    public MethodBuilder body(JCStatement body) {
+        this.body = body;
         return this;
     }
 
@@ -89,9 +98,14 @@ public class MethodBuilder extends TreeBuilder<JCMethodDecl> {
 
     @Override
     public JCMethodDecl build() {
-        return factory.maker().MethodDef(
-                mods, factory.names().fromString(name), type,
-                typeParameters, receiver, parameters,
-                exceptions, body, value);
+        return factory.maker.MethodDef(
+                factory.utils.mods(mods),
+                factory.utils.name(name),
+                type, typeParameters, receiver,
+                parameters, exceptions,
+                (body instanceof JCBlock)
+                        ? (JCBlock) body
+                        : factory.maker.Block(0L, List.of(body)),
+                value);
     }
 }

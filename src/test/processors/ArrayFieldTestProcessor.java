@@ -27,12 +27,12 @@ public class ArrayFieldTestProcessor extends TestProcessorBase {
             public void visitClassDef(JCTree.JCClassDecl tree) {
                 super.visitClassDef(tree);
                 EurekaFactory factory = new EurekaFactory(names, ArrayFieldTestProcessor.this.factory);
-                tree.defs = tree.defs.append(factory.array()
+                tree.defs = tree.defs.append(factory.field()
                         .mods(PUBLIC)
                         .type(String.class)
                         .name("generated")
-                        .elements("javac", "go", "brr")
-                        .variable()
+                        .value("{\"javac\",\"go\",\"brr\"}")
+                        .build()
                 );
                 result = tree;
             }

@@ -6,20 +6,16 @@ import com.sun.tools.javac.util.Names;
 import org.transparent.diamond.compiletest.AnnotationForTesting;
 import org.transparent.lucent.processor.LucentProcessor;
 import org.transparent.lucent.transform.LucentTranslator;
+import org.transparent.lucent.transform.LucentValidator;
 
 import javax.lang.model.element.Element;
 import java.lang.annotation.Annotation;
 
 public abstract class TestProcessorBase extends LucentProcessor {
 
-    class TestTranslatorBase extends LucentTranslator {
-        public TestTranslatorBase(Names names, TreeMaker factory) {
-            super(names, factory);
-        }
-
-        @Override
-        public void translate(JCTree jcTree, Element element) {
-            jcTree.accept(visitor);
+    static class TestTranslatorBase extends LucentTranslator {
+        public TestTranslatorBase(Names names, TreeMaker factory, LucentValidator validator) {
+            super(names, factory, validator);
         }
     }
 
